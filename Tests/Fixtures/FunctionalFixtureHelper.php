@@ -47,6 +47,21 @@ final class FunctionalFixtureHelper
         $this->em->flush();
     }
 
+    public function createAndEnableCompanySegmentsPlugin(): void
+    {
+        $plugin = new Plugin();
+        $plugin->setName('Company Segments by Leuchtfeuer');
+        $plugin->setBundle('LeuchtfeuerCompanySegmentsBundle');
+        $this->em->persist($plugin);
+
+        $integration = new Integration();
+        $integration->setPlugin($plugin);
+        $integration->setIsPublished(true);
+        $integration->setName('LeuchtfeuerCompanySegments');
+        $this->em->persist($integration);
+        $this->em->flush();
+    }
+
     public function createSegment(string $name, string $alias): LeadList
     {
         $segment = new LeadList();
@@ -83,10 +98,13 @@ final class FunctionalFixtureHelper
         return $contact;
     }
 
-    public function createCompany(string $name): Company
+    public function createCompany(string $name, ?string $email = null): Company
     {
         $company = new Company();
         $company->setName($name);
+        if (null !== $email) {
+            $company->setEmail($email);
+        }
         $this->em->persist($company);
 
         return $company;
@@ -243,9 +261,9 @@ final class FunctionalFixtureHelper
             return $campaign instanceof \Mautic\CampaignBundle\Entity\Campaign ? $campaign->getId() : $campaign;
         }, $addToOrRestartCampaign);
         $event->setProperties([
-            'triggerContacts'    => $triggerContacts,
-            'addToCampaign'      => $addToCampaignIds,
-            'removeFromCampaign' => $removeFromCampaignIds,
+            'triggerContacts'        => $triggerContacts,
+            'addToCampaign'          => $addToCampaignIds,
+            'removeFromCampaign'     => $removeFromCampaignIds,
             'restartOrAddToCampaign' => $addToOrRestartCampaignIds,
         ]);
         $event->setOrder(1);

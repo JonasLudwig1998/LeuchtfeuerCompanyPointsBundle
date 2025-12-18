@@ -19,6 +19,7 @@ class CompanyTriggerEvent
     public const COMPANY_ALL_KNOWN_CONTACTS_WITH_RECENT_ACTIVITY          = 'all_known_contacts_with_recent_activity';
     public const COMPANY_ALL_CONTACTS          = 'all_contacts';
     public const COMPANY_ALL_KNOWN_CONTACTS          = 'all_known_contacts';
+    public const PLACEHOLDER_CONTACT = 'placeholder_contact';
 
     /**
      * @var int
